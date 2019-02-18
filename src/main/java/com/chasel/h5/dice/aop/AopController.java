@@ -33,7 +33,7 @@ public class AopController {
 			log.info(method + " 运行时间： " + (System.currentTimeMillis() - startTime) + "ms\n");
 			return o;
 		} catch (Throwable e) {
-			log.error(method + "has an error: {}" + e.getMessage());
+			log.error(method + "has an error: {}" , e);
 			return null;
 		}
 	}

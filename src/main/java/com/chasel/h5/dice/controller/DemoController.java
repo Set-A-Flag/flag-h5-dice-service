@@ -1,8 +1,8 @@
 package com.chasel.h5.dice.controller;
 
 import static com.chasel.h5.dice.constant.Constants.*;
-import com.chasel.h5.dice.constant.BaseController;
-import com.chasel.h5.dice.service.DemoService;
+
+import com.chasel.h5.dice.service.IDemoService;
 import com.chasel.h5.dice.vo.ResponseResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class DemoController extends BaseController {
 
     @Autowired
-    DemoService demoService;
+    IDemoService demoService;
 
     @ApiOperation("demo")
     @GetMapping("/demo")
