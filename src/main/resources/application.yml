@@ -1,5 +1,5 @@
 server:
-  port: 12306
+  port: 9002
   maxHttpHeaderSize: 8192
 #  servlet:
 #    context-path: /blog
