@@ -15,7 +15,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source> <!-- Java版本 -->
 		<maven.compiler.target>1.8</maven.compiler.target>
     	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<docker.image.prefix>blog</docker.image.prefix>
+		<docker.image.prefix>h5</docker.image.prefix>
   </properties>
 
    <parent>
