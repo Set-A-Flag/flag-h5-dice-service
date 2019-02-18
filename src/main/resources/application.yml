@@ -1,5 +1,5 @@
 server:
-  port: 9002
+  port: 12306
   maxHttpHeaderSize: 8192
 #  servlet:
 #    context-path: /blog
@@ -11,6 +11,8 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 50MB
+  thymeleaf:
+      prefix: classpath:templates/
 
 ## Mybatis 配置
 mybatis:
