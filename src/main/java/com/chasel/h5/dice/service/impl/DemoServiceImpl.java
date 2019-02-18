@@ -2,12 +2,12 @@ package com.chasel.h5.dice.service.impl;
 
 import static com.chasel.h5.dice.constant.Constants.*;
 import com.chasel.h5.dice.exception.ServiceException;
-import com.chasel.h5.dice.service.DemoService;
+import com.chasel.h5.dice.service.IDemoService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 @Service
-public class DemoServiceImpl implements DemoService {
+public class DemoServiceImpl implements IDemoService {
 
 
     @Override

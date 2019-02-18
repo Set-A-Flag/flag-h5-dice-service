@@ -1,10 +1,9 @@
-package com.chasel.h5.dice.constant;
+package com.chasel.h5.dice.controller;
 
 import com.chasel.h5.dice.exception.ServiceException;
 import com.chasel.h5.dice.util.I18NSupport;
 import com.chasel.h5.dice.util.LamCallable;
 import com.chasel.h5.dice.util.LamRunnable;
-import com.chasel.h5.dice.util.ResourceUtil;
 import com.chasel.h5.dice.vo.ResponseResult;
 import com.chasel.h5.dice.vo.ResponseStatus;
 import org.slf4j.Logger;

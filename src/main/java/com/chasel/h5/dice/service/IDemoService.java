@@ -2,7 +2,7 @@ package com.chasel.h5.dice.service;
 
 import com.chasel.h5.dice.exception.ServiceException;
 
-public interface DemoService {
+public interface IDemoService {
 
     String demo();
 
