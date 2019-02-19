@@ -122,7 +122,7 @@ public class H5DiceController extends BaseController{
         return value(() -> h5DiceService.queryPrizes(account), QUERY_SUCCESS, QUERY_FAIL);
     }
 
-    @ApiOperation(value = "查看中奖奖品类型接口")
+    @ApiOperation(value = "获取二维码图片接口")
     @GetMapping("/qrCode/{account}")
     public ResponseResult qrCode(
             @ApiParam(required = true, name = "account", type = "path", value = "微信昵称") @PathVariable String account) {
