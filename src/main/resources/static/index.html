@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>果本</title>
+    <style>
+        body {
+            align-content: center;
+            font-size: 36px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 72px;
+        }
+
+        img {
+            height: 132px;
+            width: 132px;
+        }
+    </style>
+    <script>
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");//获取字符串的起点
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;//获取值的起点
+                    c_end = document.cookie.indexOf(";", c_start);//获取结尾处
+                    if (c_end == -1) c_end = document.cookie.length;//如果是最后一个，结尾就是cookie字符串的结尾
+                    return decodeURI(document.cookie.substring(c_start, c_end));//截取字符串返回
+                }
+            }
+            return "";
+        }
+
+        var openId = getCookie("openId");
+        if (openId == null || openId == "") {
+            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?callbackUrl=" + window.location.href;
+        } else {
+            var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
+
+            request.onreadystatechange = function () { // 状态发生变化时，函数被回调
+                if (request.readyState === 4) { // 成功完成
+                    // 判断响应结果:
+                    if (request.status === 200) {
+                        // 成功，通过responseText拿到响应的文本:
+                        var userInfo = JSON.parse(request.responseText)["result"];
+                        if (userInfo == null) {
+                            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?callbackUrl=" + window.location.href;
+                        }
+                    }
+                    document.getElementById("nickname").innerHTML = userInfo["nickname"];
+                    document.getElementById("headImgUrl").src = userInfo["headimgurl"];
+                }
+            }
+
+            // 发送请求:
+            request.open('GET', 'http://o2n3712597.imwork.net/wechatAuth/getUserInfo?openId=' + openId);
+            request.send();
+        }
+    </script>
+</head>
+<body>
+<H1>用户信息</H1>
+<div>昵称：<span id="nickname"></span></div>
+<div>头像<img id="headImgUrl"></div>
+</body>
+</html>
