@@ -38,3 +38,11 @@ logging:
   level:
     com.chasel.blog.dao: DEBUG
     org.springframework.web.servlet.DispatherServlet: DEBUG
+
+wechat:
+  appId: wx3abc94d28018f67b
+  secret: 782e2d1df576cc62db88542bb47da575
+
+redis:
+  host: 127.0.0.1
+  post: 6379
