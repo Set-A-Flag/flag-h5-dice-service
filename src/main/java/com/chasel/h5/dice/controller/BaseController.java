@@ -34,15 +34,15 @@ public abstract class BaseController extends I18NSupport {
 			return new ResponseResult(ResponseStatus.SUCCESS, getMessage(successMsg));
 
 		} catch (IllegalArgumentException e) {
-			log.error("process has an error:" , e.getMessage());
+			log.error("process has an error:" , e);
 			responseMsg = e.getMessage();
 
 		} catch (ServiceException e) {
-			log.error("process has an error :" , e.getErrMsg());
+			log.error("process has an error :" , e);
 			responseMsg = (String) e.getErrMsg();
 
 		} catch (Exception e) {
-			log.error("process has an error :" , e.getMessage());
+			log.error("process has an error :" , e);
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMessage(responseMsg));
@@ -62,14 +62,14 @@ public abstract class BaseController extends I18NSupport {
 			Object obj = run.run();
 			return new ResponseResult(ResponseStatus.SUCCESS, getMessage(successMsg), obj);
 		} catch (IllegalArgumentException e) {
-			log.error("value has an error :" , e.getMessage());
+			log.error("value has an error :" , e);
 			responseMsg = e.getMessage();
 
 		} catch (ServiceException e) {
 			responseMsg = (String) e.getErrMsg();
-			log.error("value has an error :" , e.getErrMsg());
+			log.error("value has an error :" , e);
 		} catch (Exception e) {
-			log.error("value has an error :" , e.getMessage());
+			log.error("value has an error :" , e);
 			responseMsg = failMsg;
 		}
 		return new ResponseResult(ResponseStatus.FAIL, getMessage(responseMsg));

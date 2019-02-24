@@ -1,5 +1,6 @@
 package com.chasel.h5.dice.service;
 
+import com.chasel.h5.dice.exception.ServiceException;
 import com.chasel.h5.dice.vo.OwnerVO;
 import com.chasel.h5.dice.vo.UserVO;
 
@@ -41,7 +42,7 @@ public interface IH5DiceService {
      * @Param [name]
      * @return boolean
      **/
-    boolean checkNumOfGames(String account);
+    boolean checkNumOfGames(String account) throws ServiceException;
 
     /**
      * @Author chasel
