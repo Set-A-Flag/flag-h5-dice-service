@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chasel.h5.dice.dao.IH5DiceDao">
+
+	<select id="getRecordingTimeByAccount" resultType="java.util.Map">
+		select recording_time recordingTime, number_of_games numOfGames
+		from t_user
+		where account = #{account}
+	</select>
+  
+</mapper>
