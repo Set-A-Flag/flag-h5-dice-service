@@ -14,4 +14,6 @@ import java.util.Map;
 public interface IH5DiceDao {
 
     Map<String, Object> getRecordingTimeByAccount(@Param("account") String account);
+
+    Timestamp getTreasureBoxTimeBy(@Param("account") String account);
 }
