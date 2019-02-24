@@ -7,5 +7,11 @@
 		from t_user
 		where account = #{account}
 	</select>
+
+	<select id="getTreasureBoxTimeBy" resultType="java.sql.Timestamp">
+		select treasure_box_time
+		from t_user
+		where account = #{account}
+	</select>
   
 </mapper>

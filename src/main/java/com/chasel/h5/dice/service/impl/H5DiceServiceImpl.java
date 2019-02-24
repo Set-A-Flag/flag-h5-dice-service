@@ -45,10 +45,10 @@ public class H5DiceServiceImpl implements IH5DiceService {
     public boolean checkNumOfGames(String account) throws ServiceException {
         // 1、获取数据库字段recording_time记录时间
         Map<String, Object> map = ih5DiceDao.getRecordingTimeByAccount(account);
+        if (map == null) return true;
         Integer numOfGames = MapUtils.getInteger(map, NUM_OF_GAMES);
         Timestamp time = (Timestamp) map.get(RECORDING_TIME);
         // 2、与当前时间小时比较
-        if (time == null) return true;
         String timeStr = time.toString();
         String timeHour = timeStr.substring(0, timeStr.indexOf(":"));
         SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MM_DD_HH);
@@ -124,7 +124,15 @@ public class H5DiceServiceImpl implements IH5DiceService {
 
     @Override
     public boolean checkPrizesTimes(String account) {
-
+        // 检查是否中奖超过24小时，超过返回true，不超过返回false，中奖时间treasure_box_time
+        Timestamp time = ih5DiceDao.getTreasureBoxTimeBy(account);
+        if (time != null) {
+            long diff  = System.currentTimeMillis() - time.getTime();
+            long days = diff / (1000 * 60 * 60 * 24);
+            if (days >= 1) {
+                return true;
+            }
+        }
         return false;
     }
 
