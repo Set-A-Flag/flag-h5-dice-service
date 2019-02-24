@@ -11,7 +11,7 @@ import java.io.IOException;
 /**
  * 微信授权-service
  */
-public interface WechatAuthService {
+public interface IWechatAuthService {
 
     /**
      * 用户同意授权，回调页面获取code
@@ -28,7 +28,8 @@ public interface WechatAuthService {
      *
      * @param openId
      * @return
+     * @throws ServiceException
      */
-    public abstract JSONObject getUserInfo(String openId);
+    public abstract JSONObject getUserInfo(String openId) throws ServiceException;
 
 }

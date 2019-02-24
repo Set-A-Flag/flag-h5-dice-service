@@ -33,28 +33,43 @@
             return "";
         }
 
+        //获取openId
         var openId = getCookie("openId");
-        if (openId == null || openId == "") {
-            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?callbackUrl=" + window.location.href;
-        } else {
-            var request = new XMLHttpRequest(); // 新建XMLHttpRequest对象
 
-            request.onreadystatechange = function () { // 状态发生变化时，函数被回调
-                if (request.readyState === 4) { // 成功完成
-                    // 判断响应结果:
-                    if (request.status === 200) {
+        // openId为空，则表示未授权网页登录
+        if (openId == null || openId == "") {
+            // 调用登录接口
+            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?state=" + window.location.href;
+        } else {
+            // 新建XMLHttpRequest对象，以调用获取用户信息接口
+            var request = new XMLHttpRequest();
+
+            // 调用完成
+            request.onreadystatechange = function () {
+                if (request.readyState === 4) {
+                    //获取状态码
+                    var statusCode = request.status;
+
+                    // 判断响应结果
+                    if (statusCode === 200) {
                         // 成功，通过responseText拿到响应的文本:
                         var userInfo = JSON.parse(request.responseText)["result"];
+
                         if (userInfo == null) {
-                            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?callbackUrl=" + window.location.href;
+                            // 跳转到401页面。
+                            window.href = "http://o2n3712597.imwork.net/401.html";
                         }
                     }
+
+                    // 填充昵称框
                     document.getElementById("nickname").innerHTML = userInfo["nickname"];
+
+                    // 填充头像
                     document.getElementById("headImgUrl").src = userInfo["headimgurl"];
                 }
             }
 
-            // 发送请求:
+            // 发送请求
             request.open('GET', 'http://o2n3712597.imwork.net/wechatAuth/getUserInfo?openId=' + openId);
             request.send();
         }

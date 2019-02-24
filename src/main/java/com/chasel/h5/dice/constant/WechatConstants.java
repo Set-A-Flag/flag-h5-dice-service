@@ -10,10 +10,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WechatConstants {
     //公众号appId
-    public static String APPID;
+    private static String APPID;
 
     //公众号secret
-    public static String SECRET;
+    private static String SECRET;
+
+    //获取accessToken远程接口地址
+    private static String authUrl;
 
     @Autowired(required = true)
     public void setAPPID(@Value("${wechat.appId}") String APPID) {
@@ -23,5 +26,22 @@ public class WechatConstants {
     @Autowired(required = true)
     public void setSECRET(@Value("${wechat.secret}") String SECRET) {
         WechatConstants.SECRET = SECRET;
+    }
+
+    @Autowired
+    public void setAuthUrl(@Value("${wechat.authUrl}") String authUrl) {
+        WechatConstants.authUrl = authUrl;
+    }
+
+    public static String getAPPID() {
+        return APPID;
+    }
+
+    public static String getSECRET() {
+        return SECRET;
+    }
+
+    public static String getAuthUrl() {
+        return authUrl;
     }
 }

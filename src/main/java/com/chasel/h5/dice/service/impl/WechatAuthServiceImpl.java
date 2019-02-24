@@ -2,9 +2,10 @@ package com.chasel.h5.dice.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.chasel.h5.dice.constant.WechatConstants;
-import com.chasel.h5.dice.service.WechatAuthService;
+import com.chasel.h5.dice.exception.ServiceException;
+import com.chasel.h5.dice.service.IWechatAuthService;
 import com.chasel.h5.dice.util.HttpUtils;
-import com.chasel.h5.dice.vo.ResponseResult;
+import com.chasel.h5.dice.util.WechaUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,28 +15,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.URLEncoder;
 
 @Service
-public class WechatAuthServiceImpl implements WechatAuthService {
+public class WechatAuthServiceImpl implements IWechatAuthService {
     //日志记录
     private static final Logger logger = LoggerFactory.getLogger(WechatAuthServiceImpl.class);
 
     @Override
     public void getUserAuthorization() {
-        //授权成功后回调地址
-        String redirectUrl = "http://o2n3712597.imwork.net/wechatAuth/auth";
+        //获取state参数
+        String state = HttpUtils.getHttpServletRequest().getParameter("state");
+
+        //scope类型，snsapi_userinfo|snsapi_base
+        String scopeType = "snsapi_userinfo";
 
         try {
             //用户授权url
-            String authorizationUrl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" + WechatConstants.APPID +
-                    "&redirect_uri=" + URLEncoder.encode(redirectUrl, "UTF-8") +
-                    "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
+            String authorizationUrl = WechaUtils.getAuthorizationUrl(WechatConstants.getAuthUrl(), scopeType, state);
 
-            HttpServletResponse response = HttpUtils.getHttpServletResponse();
-
-            //重定向到回调地址
-            response.sendRedirect(authorizationUrl);
+            //重定向，跳转到重定向地址
+            HttpUtils.getHttpServletResponse().sendRedirect(authorizationUrl);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -44,15 +43,16 @@ public class WechatAuthServiceImpl implements WechatAuthService {
     @Override
     public void auth() {
         HttpServletRequest request = HttpUtils.getHttpServletRequest();
+        logger.info(request.getRequestURI());
 
         //获取code
         String code = request.getParameter("code");
 
+        //获取state
+        String state = request.getParameter("state");
+
         //获取accessToken以及openid远程url
-        String tokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + WechatConstants.APPID +
-                "&secret=" + WechatConstants.SECRET +
-                "&code=" + code +
-                "&grant_type=authorization_code";
+        String tokenUrl = WechaUtils.getAccessTokenUrl(code);
 
         try {
             //调用远程接口获取accessToken以及openid远程响应结果
@@ -88,7 +88,7 @@ public class WechatAuthServiceImpl implements WechatAuthService {
             openIdCookie.setPath("/");
             response.addCookie(openIdCookie);
 
-            response.sendRedirect("../index.html");
+            response.sendRedirect(state);
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
@@ -97,10 +97,21 @@ public class WechatAuthServiceImpl implements WechatAuthService {
     }
 
     @Override
-    public JSONObject getUserInfo(String openId) {
-        //TO-DO，根据openId获取用户信息，暂时从session中获取
+    public JSONObject getUserInfo(String openId) throws ServiceException {
+        //TO-DO，根据openId获取用户信息，暂时从session中获取，未持久化到数据库中，用户信息会丢失。
         HttpSession session = HttpUtils.getHttpServletRequest().getSession();
         Object userInfo = session.getAttribute(openId);
+
+        if (userInfo == null) {
+            logger.error("session不存在用户信息");
+            for (Cookie cookie : HttpUtils.getHttpServletRequest().getCookies()) {
+                cookie.setMaxAge(0);
+                cookie.setPath("/");
+                HttpUtils.getHttpServletResponse().addCookie(cookie);
+                throw new ServiceException("401", "用户信息不存在，请重新登录");
+            }
+        }
+
         return (JSONObject) userInfo;
     }
 }
