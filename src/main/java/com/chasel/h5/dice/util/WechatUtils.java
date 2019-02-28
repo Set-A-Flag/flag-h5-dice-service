@@ -10,9 +10,9 @@ import java.net.URLEncoder;
 /**
  * 微信授权工具类
  */
-public class WechaUtils {
+public class WechatUtils {
     //日志记录
-    private static final Logger logger = LoggerFactory.getLogger(WechaUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(WechatUtils.class);
 
     /**
      * 获取微信网页授权url

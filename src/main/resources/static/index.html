@@ -35,11 +35,13 @@
 
         //获取openId
         var openId = getCookie("openId");
+        console.log("openid:",openId);
 
         // openId为空，则表示未授权网页登录
         if (openId == null || openId == "") {
+            console.log("调用登录接口");
             // 调用登录接口
-            window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?state=" + window.location.href;
+            window.location.href = "http://www.13idea.com/h5/dice/wechatAuth/login" + "?state=" + window.location.href;
         } else {
             // 新建XMLHttpRequest对象，以调用获取用户信息接口
             var request = new XMLHttpRequest();
@@ -70,7 +72,7 @@
             }
 
             // 发送请求
-            request.open('GET', 'http://o2n3712597.imwork.net/wechatAuth/getUserInfo?openId=' + openId);
+            request.open('GET', 'http://www.13idea.com/h5/dice/wechatAuth/getUserInfo?openId=' + openId);
             request.send();
         }
     </script>
