@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,4 +27,12 @@ public interface IH5DiceDao {
     Integer questionLattice(@Param("account") String account);
 
     Map<String, Integer> queryPrizes(@Param("account") String account);
+
+    void saveUserPhone(@Param("account")String account,@Param("phone") String phone);
+
+    String queryPhone(String account);
+
+    List<Map<String, Object>> queryUser();
+
+    void insertUserPhone(String account, String phone);
 }
