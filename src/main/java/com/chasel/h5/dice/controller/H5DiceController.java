@@ -115,7 +115,7 @@ public class H5DiceController extends BaseController{
         return process(() -> h5DiceService.saveUserPhone(account, phone), ADD_SUCCESS, ADD_FAIL);
     }
 
-    @ApiOperation(value = "查看中奖奖品类型接口")
+    @ApiOperation(value = "查看中奖奖品类型接口:珍爱套盒isTreasureBox,面膜mask -> 1不中奖，0中奖")
     @GetMapping("/queryPrizes/{account}")
     public ResponseResult queryPrizes(
             @ApiParam(required = true, name = "account", type = "path", value = "微信昵称") @PathVariable String account) {

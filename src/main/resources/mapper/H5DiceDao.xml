@@ -13,5 +13,38 @@
 		from t_user
 		where account = #{account}
 	</select>
-  
+
+	<select id="isFirstViewPrizes" resultType="java.lang.Integer">
+		select is_first_view
+		from t_user
+		where account = #{account}
+	</select>
+
+	<update id="changeIsTreasureBox">
+		update t_user
+		set is_treasure_box = #{code},
+		treasure_box_time = #{time}
+		where account = #{account}
+	</update>
+
+	<select id="maskLattice" resultType="java.lang.Integer">
+		select mask
+		from t_user
+		where account = #{account}
+	</select>
+
+  	<select id="queryPrizes" resultType="java.util.Map">
+		select mask mask,is_treasure_box isTreasureBox
+		from t_user
+		where account = #{account}
+	</select>
+
+	<select id="questionLattice" resultType="java.lang.Integer">
+		select is_treasure_box isTreasureBox
+		from t_user
+		where account = #{account}
+	</select>
+
+
+
 </mapper>
