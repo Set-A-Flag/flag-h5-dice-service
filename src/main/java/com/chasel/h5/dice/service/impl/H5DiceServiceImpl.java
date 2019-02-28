@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -17,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 /**
  * @Author chasel
@@ -28,11 +32,14 @@ import java.util.Random;
 public class H5DiceServiceImpl implements IH5DiceService {
 
     private static final Logger log = LoggerFactory.getLogger(H5DiceServiceImpl.class);
-
+    private static final String PHONE_NUMBER_REG = "^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\\d{8}$";
+    public static final String ACCOUNT_NULL = "账号错误";
     public static final String NUM_OF_GAMES = "numOfGames";
     public static final String RECORDING_TIME = "recordingTime";
     public static final String YYYY_MM_DD_HH = "yyyy-MM-dd HH";
     public static final String MSG_NO_NUM_OF_GAMES = "请下个小时再来玩";
+    public static final String PHONE_ERROR = "手机号码错误";
+    public static final String EXIST_PHONE = "已经存在电话号码!";
     @Autowired
     IH5DiceDao ih5DiceDao;
 
@@ -77,7 +84,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         //1、获取字段mask看是否第一次中奖面膜
         Integer mask = ih5DiceDao.maskLattice(account);
         //  否false：提示信息
-        if (mask.equals(1)) {
+        if (mask != null && mask.equals(1)) {
             // TODO  是true：改变mask的值，生成面膜二维码保存、数据库存储二维码地址
             return true;
         } else{
@@ -91,7 +98,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         //2、校验is_treasure_box字段的值
         Integer isTreasureBox = ih5DiceDao.questionLattice(account);
         //   值为0：可获得奖品，改变is_treasure_box值为1，并且记录treasure_box_time时间值
-        if (isTreasureBox.equals(0)) {
+        if (isTreasureBox != null && isTreasureBox.equals(0)) {
             // 2.1、随机数50000个，只有返回0为中奖，其它非中奖。
             Integer code = new Random().nextInt(49999);
             if (code.equals(0)) {
@@ -129,17 +136,21 @@ public class H5DiceServiceImpl implements IH5DiceService {
     public boolean isFirstViewPrizes(String account) {
         // 1、查询字段is_first_view，值为1 -> true 然后改变值为0, 值为0 -> false
         Integer code = ih5DiceDao.isFirstViewPrizes(account);
-        if (code.equals(1)) {
-            //ih5DiceDao.changeIsFirstView(account, 0);
-            return true;
-        }else {
+        if (code != null && code.equals(1)) {
             return false;
+        }else {
+            return true;
         }
     }
 
     @Override
     public void saveUserPhone(String account, String phone) {
-
+        Assert.isTrue(!StringUtils.isEmpty(account), ACCOUNT_NULL);
+        boolean matches = Pattern.matches(PHONE_NUMBER_REG, phone);
+        Assert.isTrue(matches, PHONE_ERROR);
+        String phonev = ih5DiceDao.queryPhone(account);
+        Assert.isTrue(StringUtils.isEmpty(phonev), EXIST_PHONE);
+        ih5DiceDao.saveUserPhone(account, phone);
     }
 
     @Override

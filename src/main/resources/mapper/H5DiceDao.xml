@@ -45,6 +45,28 @@
 		where account = #{account}
 	</select>
 
+	<select id="queryPhone" resultType="java.lang.String">
+		select phone
+		from t_user
+		where account = #{account}
+	</select>
+
+	<update id="saveUserPhone">
+		update t_user
+		set phone = #{phone}
+		is_first_view = #{isFirstView}
+		where account = #{account}
+	</update>
+
+	<select id="queryUser" resultType="java.util.List">
+		select * from t_user
+	</select>
+
+	<insert id="insertUserPhone">
+		insert into t_user (account, phone)
+		value (#{account}, #{phone})
+	</insert>
+
 
 
 </mapper>
