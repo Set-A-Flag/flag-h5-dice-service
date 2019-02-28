@@ -42,8 +42,8 @@ logging:
 wechat:
   appId: wx3abc94d28018f67b #公众号id
   secret: 782e2d1df576cc62db88542bb47da575 #公众号secret
-  authUrl: http://o2n3712597.imwork.net/wechatAuth/auth #鉴权成功后的回调地址
-#  authUrl: http://www.idea.com:9002/wechatAuth/auth #貌似需要授权成功后的回调地址不允许带端口号
+  authUrl: http://www.13idea.com/h5/dice/wechatAuth/auth #鉴权成功后的回调地址
+#  authUrl: http://o2n3712597.imwork.net/wechatAuth/auth
 redis:
   host: 127.0.0.1
   post: 6379
