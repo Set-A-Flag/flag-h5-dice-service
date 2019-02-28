@@ -5,7 +5,7 @@ import com.chasel.h5.dice.constant.WechatConstants;
 import com.chasel.h5.dice.exception.ServiceException;
 import com.chasel.h5.dice.service.IWechatAuthService;
 import com.chasel.h5.dice.util.HttpUtils;
-import com.chasel.h5.dice.util.WechaUtils;
+import com.chasel.h5.dice.util.WechatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class WechatAuthServiceImpl implements IWechatAuthService {
 
         try {
             //用户授权url
-            String authorizationUrl = WechaUtils.getAuthorizationUrl(WechatConstants.getAuthUrl(), scopeType, state);
+            String authorizationUrl = WechatUtils.getAuthorizationUrl(WechatConstants.getAuthUrl(), scopeType, state);
 
             //重定向，跳转到重定向地址
             HttpUtils.getHttpServletResponse().sendRedirect(authorizationUrl);
@@ -52,7 +52,7 @@ public class WechatAuthServiceImpl implements IWechatAuthService {
         String state = request.getParameter("state");
 
         //获取accessToken以及openid远程url
-        String tokenUrl = WechaUtils.getAccessTokenUrl(code);
+        String tokenUrl = WechatUtils.getAccessTokenUrl(code);
 
         try {
             //调用远程接口获取accessToken以及openid远程响应结果
