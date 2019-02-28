@@ -16,4 +16,14 @@ public interface IH5DiceDao {
     Map<String, Object> getRecordingTimeByAccount(@Param("account") String account);
 
     Timestamp getTreasureBoxTimeBy(@Param("account") String account);
+
+    Integer isFirstViewPrizes(@Param("account")String account);
+
+    void changeIsTreasureBox(@Param("account") String account, @Param("code") int code,@Param("time") Timestamp timestamp);
+
+    Integer maskLattice(@Param("account") String account);
+
+    Integer questionLattice(@Param("account") String account);
+
+    Map<String, Integer> queryPrizes(@Param("account") String account);
 }

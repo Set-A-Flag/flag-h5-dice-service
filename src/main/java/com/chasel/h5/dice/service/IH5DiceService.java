@@ -157,7 +157,7 @@ public interface IH5DiceService {
      * @Param [account]
      * @return void
      **/
-    Map<String, Object> queryPrizes(String account);
+    Map<String, Integer> queryPrizes(String account);
 
     /**
      * @Author chasel

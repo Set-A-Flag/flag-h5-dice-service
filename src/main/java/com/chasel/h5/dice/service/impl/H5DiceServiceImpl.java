@@ -6,6 +6,8 @@ import com.chasel.h5.dice.service.IH5DiceService;
 import com.chasel.h5.dice.vo.OwnerVO;
 import com.chasel.h5.dice.vo.UserVO;
 import org.apache.commons.collections4.MapUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @Author chasel
@@ -23,6 +26,8 @@ import java.util.Map;
  **/
 @Service
 public class H5DiceServiceImpl implements IH5DiceService {
+
+    private static final Logger log = LoggerFactory.getLogger(H5DiceServiceImpl.class);
 
     public static final String NUM_OF_GAMES = "numOfGames";
     public static final String RECORDING_TIME = "recordingTime";
@@ -69,12 +74,35 @@ public class H5DiceServiceImpl implements IH5DiceService {
 
     @Override
     public boolean maskLattice(String account) {
-        return false;
+        //1、获取字段mask看是否第一次中奖面膜
+        Integer mask = ih5DiceDao.maskLattice(account);
+        //  否false：提示信息
+        if (mask.equals(1)) {
+            // TODO  是true：改变mask的值，生成面膜二维码保存、数据库存储二维码地址
+            return true;
+        } else{
+            return false;
+        }
     }
 
     @Override
     public boolean questionLattice(String account) {
-        return false;
+        //1、抽奖： 中奖true，非中奖false。中奖只有珍爱套盒
+        //2、校验is_treasure_box字段的值
+        Integer isTreasureBox = ih5DiceDao.questionLattice(account);
+        //   值为0：可获得奖品，改变is_treasure_box值为1，并且记录treasure_box_time时间值
+        if (isTreasureBox.equals(0)) {
+            // 2.1、随机数50000个，只有返回0为中奖，其它非中奖。
+            Integer code = new Random().nextInt(49999);
+            if (code.equals(0)) {
+                ih5DiceDao.changeIsTreasureBox(account, 1, new Timestamp(System.currentTimeMillis()));
+                return true;
+            }else{
+                return false;
+            }
+        }else { //值为1：直接返回false，不中奖
+            return false;
+        }
     }
 
     @Override
@@ -99,7 +127,14 @@ public class H5DiceServiceImpl implements IH5DiceService {
 
     @Override
     public boolean isFirstViewPrizes(String account) {
-        return false;
+        // 1、查询字段is_first_view，值为1 -> true 然后改变值为0, 值为0 -> false
+        Integer code = ih5DiceDao.isFirstViewPrizes(account);
+        if (code.equals(1)) {
+            //ih5DiceDao.changeIsFirstView(account, 0);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
@@ -108,8 +143,11 @@ public class H5DiceServiceImpl implements IH5DiceService {
     }
 
     @Override
-    public Map<String, Object> queryPrizes(String account) {
-        return null;
+    public Map<String, Integer> queryPrizes(String account) {
+        //1、查询字段is_treasure_box和mask
+        Map<String, Integer> resultMap = ih5DiceDao.queryPrizes(account);
+        //2、构造成Map返回，字段值为0代表有奖品，为1不中奖
+        return resultMap;
     }
 
     @Override
@@ -138,6 +176,13 @@ public class H5DiceServiceImpl implements IH5DiceService {
 
     @Override
     public boolean isMaskSet(String account) {
-        return false;
+        //1、0-999范围的1000个随机数，0是中奖返回true，其它返回false
+        Integer code = new Random().nextInt(99);
+        log.info("0~99 -> account : {} , code ： {}", account, code);
+        if (code.equals(0)){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
