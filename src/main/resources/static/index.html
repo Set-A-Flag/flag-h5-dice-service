@@ -35,9 +35,11 @@
 
         //获取openId
         var openId = getCookie("openId");
+        console.log("openid:",openId);
 
         // openId为空，则表示未授权网页登录
         if (openId == null || openId == "") {
+            console.log("调用登录接口");
             // 调用登录接口
             window.location.href = "http://o2n3712597.imwork.net/wechatAuth/login" + "?state=" + window.location.href;
         } else {
