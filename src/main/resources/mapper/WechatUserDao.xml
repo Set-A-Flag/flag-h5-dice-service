@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chasel.h5.dice.dao.WechatUserDao">
+    <select id="queryByOpenid" resultType="wechatUser" parameterType="string">
+        select * from t_wechat_user;
+    </select>
+
+    <insert id="update" parameterType="wechatUser">
+        insert into t_wechat_user(openid,nickname,country,province,city,language,sex,headimgurl)
+          values
+          (#{openid},#{nickname},#{country},#{province},#{city},#{lanugage},#{sex},#{headimgurl})
+          on duplicate key
+          update nickname=#{nickname},country=#{country},province=#{province},city=#{city},lanuage=#{lanugage},sex=#{sex},headimgurl=#{headimgurl};
+    </insert>
+
+    <delete id="deleteByOpenid" parameterType="openid">
+        delete from t_wechat_user where openid=#{openid};
+    </delete>
+</mapper>

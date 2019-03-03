@@ -15,22 +15,28 @@ public class WechatConstants {
     //公众号secret
     private static String SECRET;
 
-    //获取accessToken远程接口地址
-    private static String authUrl;
+    //accessToken远程接口地址
+    private static String AUTH_URL;
+
+    //scope类型，能获取到微信用户基本信息
+    public static final String SCOPE_TYPE_USER_INFO = "snsapi_userinfo";
+
+    //scope类型，只能获取到微信用户openid
+    public static final String SCOPE_TYPE_BASE = "snsapi_base";
 
     @Autowired(required = true)
-    public void setAPPID(@Value("${wechat.appId}") String APPID) {
+    private void setAPPID(@Value("${wechat.appId}") String APPID) {
         WechatConstants.APPID = APPID;
     }
 
     @Autowired(required = true)
-    public void setSECRET(@Value("${wechat.secret}") String SECRET) {
+    private void setSECRET(@Value("${wechat.secret}") String SECRET) {
         WechatConstants.SECRET = SECRET;
     }
 
     @Autowired
-    public void setAuthUrl(@Value("${wechat.authUrl}") String authUrl) {
-        WechatConstants.authUrl = authUrl;
+    private void setAuthUrl(@Value("${wechat.authUrl}") String authUrl) {
+        WechatConstants.AUTH_URL = authUrl;
     }
 
     public static String getAPPID() {
@@ -42,6 +48,6 @@ public class WechatConstants {
     }
 
     public static String getAuthUrl() {
-        return authUrl;
+        return AUTH_URL;
     }
 }
