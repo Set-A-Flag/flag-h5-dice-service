@@ -9,6 +9,8 @@ import org.apache.ibatis.type.Alias;
 public class WechatUser {
     //微信用户openid
     private String openid;
+    //微信用户昵称
+    private String nickname;
     //微信用户头像url
     private String headimgurl;
     //微信用户所属国家
@@ -78,10 +80,19 @@ public class WechatUser {
         this.sex = sex;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     @Override
     public String toString() {
         return "WechatUser{" +
                 "openid='" + openid + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", headimgurl='" + headimgurl + '\'' +
                 ", country='" + country + '\'' +
                 ", province='" + province + '\'' +
