@@ -8,9 +8,9 @@
     <insert id="update" parameterType="wechatUser">
         insert into t_wechat_user(openid,nickname,country,province,city,language,sex,headimgurl)
           values
-          (#{openid},#{nickname},#{country},#{province},#{city},#{lanugage},#{sex},#{headimgurl})
+          (#{openid},#{nickname},#{country},#{province},#{city},#{language},#{sex},#{headimgurl})
           on duplicate key
-          update nickname=#{nickname},country=#{country},province=#{province},city=#{city},lanuage=#{lanugage},sex=#{sex},headimgurl=#{headimgurl};
+          update nickname=#{nickname},country=#{country},province=#{province},city=#{city},lanuage=#{language},sex=#{sex},headimgurl=#{headimgurl};
     </insert>
 
     <delete id="deleteByOpenid" parameterType="string">
