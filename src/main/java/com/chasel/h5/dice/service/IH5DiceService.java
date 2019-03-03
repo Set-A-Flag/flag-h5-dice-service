@@ -4,6 +4,7 @@ import com.chasel.h5.dice.exception.ServiceException;
 import com.chasel.h5.dice.vo.OwnerVO;
 import com.chasel.h5.dice.vo.UserVO;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -177,7 +178,7 @@ public interface IH5DiceService {
      * @Param [userVO]
      * @return void
      **/
-    void saveUserDeliveryInfo(UserVO userVO);
+    void saveUserDeliveryInfo(UserVO userVO) throws ServiceException;
 
     /**
      * @Author chasel

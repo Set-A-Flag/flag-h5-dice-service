@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
     public static final String MSG_NO_NUM_OF_GAMES = "请下个小时再来玩";
     public static final String PHONE_ERROR = "手机号码错误";
     public static final String EXIST_PHONE = "已经存在电话号码!";
+
     @Autowired
     IH5DiceDao ih5DiceDao;
 
@@ -145,12 +147,22 @@ public class H5DiceServiceImpl implements IH5DiceService {
 
     @Override
     public void saveUserPhone(String account, String phone) {
+        // 1、参数判空
         Assert.isTrue(!StringUtils.isEmpty(account), ACCOUNT_NULL);
+        // 2、校验手机号
         boolean matches = Pattern.matches(PHONE_NUMBER_REG, phone);
         Assert.isTrue(matches, PHONE_ERROR);
-        String phonev = ih5DiceDao.queryPhone(account);
-        Assert.isTrue(StringUtils.isEmpty(phonev), EXIST_PHONE);
-        ih5DiceDao.saveUserPhone(account, phone);
+        // 3、查看用户是否存在
+        String userValue = ih5DiceDao.queryUser(account);
+        if (StringUtils.isEmpty(userValue)) {
+            ih5DiceDao.insertUserPhone(account,phone, 0);
+        }else{
+            // 3、查询手机号是否存在
+            String phonev = ih5DiceDao.queryPhone(account);
+            Assert.isTrue(StringUtils.isEmpty(phonev), EXIST_PHONE);
+            // 、保存手机号码
+            ih5DiceDao.saveUserPhone(account, phone, 0);
+        }
     }
 
     @Override
@@ -167,8 +179,35 @@ public class H5DiceServiceImpl implements IH5DiceService {
     }
 
     @Override
-    public void saveUserDeliveryInfo(UserVO userVO) {
-
+    public void saveUserDeliveryInfo(UserVO userVO) throws ServiceException {
+        // 1、如果是活动结束后，抛出异常，返回提示语
+        Assert.isTrue(Pattern.matches(PHONE_NUMBER_REG, userVO.getReceivingCall()), PHONE_ERROR);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date endTime = null;
+        Date currentTime = null;
+        try {
+            endTime = sdf.parse("2019-10-22 00:00:00");
+            currentTime = sdf.parse(new Timestamp(System.currentTimeMillis()).toString());
+        } catch (ParseException e) {
+            throw new ServiceException("格式化时间出错!");
+        }
+        if (currentTime.after(endTime)) throw new ServiceException("活动已经结束!");
+        // 2、查询中奖时间treasure_box_time，如果超过24小时，直接提示
+        Timestamp time = ih5DiceDao.getTreasureBoxTimeBy(userVO.getAccount());
+        if (time != null) {
+            long diff  = System.currentTimeMillis() - time.getTime();
+            long days = diff / (1000 * 60 * 60 * 24);
+            if (days >= 1) {
+                throw new ServiceException("中奖时间超过一天！");
+            }
+        }
+        // 3、保存收货信息
+        String userValue = ih5DiceDao.queryUser(userVO.getAccount());
+        if (!StringUtils.isEmpty(userValue)) {
+            ih5DiceDao.saveUserDeliveryInfo(userVO);
+        }else{
+            throw new ServiceException("用户不存在！");
+        }
     }
 
     @Override

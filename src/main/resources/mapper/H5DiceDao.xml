@@ -53,19 +53,24 @@
 
 	<update id="saveUserPhone">
 		update t_user
-		set phone = #{phone}
+		set phone = #{phone},
 		is_first_view = #{isFirstView}
 		where account = #{account}
 	</update>
 
-	<select id="queryUser" resultType="java.util.List">
-		select * from t_user
+	<select id="queryUser" resultType="java.lang.String">
+		select 1 from t_user where account = #{account}
 	</select>
 
 	<insert id="insertUserPhone">
 		insert into t_user (account, phone)
 		value (#{account}, #{phone})
 	</insert>
+
+	<update id="saveUserDeliveryInfo">
+		update t_user set `name` = #{userVO.name}, address = #{userVO.address}, receiving_call = #{userVO.receivingCall}
+		where account = #{userVO.account}
+	</update>
 
 
 
