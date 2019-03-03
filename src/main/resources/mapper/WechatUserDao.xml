@@ -10,7 +10,7 @@
           values
           (#{openid},#{nickname},#{country},#{province},#{city},#{language},#{sex},#{headimgurl})
           on duplicate key
-          update nickname=#{nickname},country=#{country},province=#{province},city=#{city},lanuage=#{language},sex=#{sex},headimgurl=#{headimgurl};
+          update nickname=#{nickname},country=#{country},province=#{province},city=#{city},language=#{language},sex=#{sex},headimgurl=#{headimgurl};
     </insert>
 
     <delete id="deleteByOpenid" parameterType="string">
