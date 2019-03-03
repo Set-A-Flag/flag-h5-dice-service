@@ -1,5 +1,6 @@
 package com.chasel.h5.dice.dao;
 
+import com.chasel.h5.dice.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,11 +29,13 @@ public interface IH5DiceDao {
 
     Map<String, Integer> queryPrizes(@Param("account") String account);
 
-    void saveUserPhone(@Param("account")String account,@Param("phone") String phone);
+    void saveUserPhone(@Param("account")String account,@Param("phone") String phone,@Param("isFirstView") Integer isFirstView);
 
-    String queryPhone(String account);
+    String queryPhone(@Param("account") String account);
 
-    List<Map<String, Object>> queryUser();
+    String queryUser(@Param("account") String account);
 
-    void insertUserPhone(String account, String phone);
+    void insertUserPhone(@Param("account")String account,@Param("phone") String phone, @Param("isFirstView") Integer isFirstView);
+
+    void saveUserDeliveryInfo(@Param("userVO") UserVO userVO);
 }
