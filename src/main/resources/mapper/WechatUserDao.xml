@@ -13,7 +13,7 @@
           update nickname=#{nickname},country=#{country},province=#{province},city=#{city},lanuage=#{lanugage},sex=#{sex},headimgurl=#{headimgurl};
     </insert>
 
-    <delete id="deleteByOpenid" parameterType="openid">
+    <delete id="deleteByOpenid" parameterType="string">
         delete from t_wechat_user where openid=#{openid};
     </delete>
 </mapper>
