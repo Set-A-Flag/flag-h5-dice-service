@@ -138,6 +138,14 @@ public class H5DiceController extends BaseController{
         return process(() -> h5DiceService.saveUserDeliveryInfo(userVO), ADD_SUCCESS, ADD_FAIL);
     }
 
+    @ApiOperation(value = "查询收货信息")
+    @GetMapping("/queryUserDeliveryInfo/{account}")
+    public ResponseResult queryUserDeliveryInfo(
+            @ApiParam(required = true, name = "account", type = "path", value = "微信ID") @PathVariable String account) {
+
+        return value(() -> h5DiceService.queryUserDeliveryInfo(account), QUERY_SUCCESS, QUERY_FAIL);
+    }
+
     @ApiOperation(value = "校验中奖时间是否超过24小时,超过返回true，不超过返回false")
     @GetMapping("/checkPrizesTimes/{account}")
     public ResponseResult checkPrizesTimes(

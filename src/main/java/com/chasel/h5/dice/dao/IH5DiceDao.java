@@ -38,4 +38,6 @@ public interface IH5DiceDao {
     void insertUserPhone(@Param("account")String account,@Param("phone") String phone, @Param("isFirstView") Integer isFirstView);
 
     void saveUserDeliveryInfo(@Param("userVO") UserVO userVO);
+
+    UserVO queryUserDeliveryInfo(@Param("account") String account);
 }

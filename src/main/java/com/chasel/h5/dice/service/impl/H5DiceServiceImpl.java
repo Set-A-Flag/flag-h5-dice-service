@@ -235,4 +235,11 @@ public class H5DiceServiceImpl implements IH5DiceService {
             return false;
         }
     }
+
+    @Override
+    public UserVO queryUserDeliveryInfo(String account) {
+        UserVO userVO = ih5DiceDao.queryUserDeliveryInfo(account);
+        if (userVO.getName() != null) return userVO;
+        else return null;
+    }
 }
