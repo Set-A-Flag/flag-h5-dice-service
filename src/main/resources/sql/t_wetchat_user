@@ -1,0 +1,10 @@
+create table t_wechat_user(
+  `openid` varchar(128) primary key,
+  `nickname` varchar(128) not null,
+  `headimgurl` varchar(512),
+  `country` varchar(128),
+  `province` varchar(128),
+  `city` varchar(128),
+  `language` varchar(32),
+  `sex` int
+)
