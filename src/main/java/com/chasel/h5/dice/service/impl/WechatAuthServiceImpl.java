@@ -80,6 +80,8 @@ public class WechatAuthServiceImpl implements IWechatAuthService {
                 return;
             }
 
+            request.getSession().setAttribute("openId",openId);
+
             //获取用户信息远程url
             String userInfoUrl = WechatUtils.getUserInfoUrl(accessToken, openId);
 
