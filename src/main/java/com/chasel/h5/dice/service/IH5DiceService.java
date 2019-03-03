@@ -198,4 +198,13 @@ public interface IH5DiceService {
      * @return boolean
      **/
     boolean isMaskSet(String account);
+
+    /**
+     * @Author chasel
+     * @Description 查询用户收货信息接口
+     * @Date 2019/3/3 23:25
+     * @Param [account]
+     * @return java.lang.Object
+     **/
+    UserVO queryUserDeliveryInfo(String account);
 }
