@@ -55,6 +55,15 @@
 		select account,`name`, address, receiving_call receivingCall from t_user where account = #{account}
 	</select>
 
+	<select id="writeOff" resultType="java.util.Map">
+		select account,nickname,headimgurl,write_off_mask, write_off_treasure_box, write_off_time
+		from t_user
+		inner join t_wechat_user
+		on account = openid
+		and (write_off_mask<![CDATA[!= ]]>0 or write_off_treasure_box<![CDATA[!= ]]>0)
+		order by write_off_time desc
+	</select>
+
 
 
 </mapper>

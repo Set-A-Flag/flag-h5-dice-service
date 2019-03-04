@@ -160,4 +160,10 @@ public class H5DiceController extends BaseController{
             @ApiParam(required = true, name = "account", type = "path", value = "微信ID") @PathVariable String account) {
         return value(() -> h5DiceService.isMaskSet(account), QUERY_SUCCESS, QUERY_FAIL);
     }
+
+    @ApiOperation(value = "核销列表")
+    @GetMapping("/writeOff")
+    public ResponseResult writeOff() {
+        return value(h5DiceService::writeOff, QUERY_SUCCESS, QUERY_FAIL);
+    }
 }

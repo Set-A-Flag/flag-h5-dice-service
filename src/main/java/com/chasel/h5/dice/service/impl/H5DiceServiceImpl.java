@@ -242,4 +242,23 @@ public class H5DiceServiceImpl implements IH5DiceService {
         if (userVO.getName() != null) return userVO;
         else return null;
     }
+
+    @Override
+    public List<Map<String, Object>> writeOff() {
+        List<Map<String, Object>> list = ih5DiceDao.writeOff();
+        if (!CollectionUtils.isEmpty(list)) {
+            list.forEach(map -> {
+                Integer write_off_mask = (Integer) map.remove("write_off_mask");
+                Integer write_off_treasure_box = (Integer) map.remove("write_off_treasure_box");
+                if(write_off_mask.equals(1) && write_off_treasure_box.equals(0)){
+                    map.put("writeOffType", "一片面膜");
+                }else if (write_off_mask.equals(0) && write_off_treasure_box.equals(1)){
+                    map.put("writeOffType", "珍爱套盒");
+                }else {
+                    map.put("writeOffType", "一片面膜+珍爱套盒");
+                }
+            });
+        }
+        return list;
+    }
 }
