@@ -28,7 +28,7 @@ public class WechatAuthController extends BaseController {
 
     @GetMapping("getUserInfo")
     @ResponseBody
-    public ResponseResult getUserInfo(@RequestParam String openId){
-        return value(()-> IWechatAuthService.getUserInfo(openId),Constants.QUERY_SUCCESS,Constants.QUERY_FAIL);
+    public ResponseResult getUserInfo(){
+        return value(()-> IWechatAuthService.getUserInfo(),Constants.QUERY_SUCCESS,Constants.QUERY_FAIL);
     }
 }
