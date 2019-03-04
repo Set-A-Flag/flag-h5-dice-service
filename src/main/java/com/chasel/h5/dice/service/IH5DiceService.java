@@ -207,4 +207,14 @@ public interface IH5DiceService {
      * @return java.lang.Object
      **/
     UserVO queryUserDeliveryInfo(String account);
+
+
+    /**
+     * @Author chasel
+     * @Description 核销列表接口
+     * @Date 2019/3/4 23:08
+     * @Param []
+     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     **/
+    List<Map<String, Object>> writeOff();
 }

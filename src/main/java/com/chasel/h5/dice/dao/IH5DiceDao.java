@@ -40,4 +40,6 @@ public interface IH5DiceDao {
     void saveUserDeliveryInfo(@Param("userVO") UserVO userVO);
 
     UserVO queryUserDeliveryInfo(@Param("account") String account);
+
+    List<Map<String, Object>> writeOff();
 }
