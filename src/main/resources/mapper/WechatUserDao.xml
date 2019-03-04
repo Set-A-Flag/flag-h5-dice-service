@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chasel.h5.dice.dao.WechatUserDao">
     <select id="queryByOpenid" resultType="wechatUser" parameterType="string">
-        select * from t_wechat_user;
+        select * from t_wechat_user where openid=#{openid};
     </select>
 
     <insert id="update" parameterType="wechatUser">
