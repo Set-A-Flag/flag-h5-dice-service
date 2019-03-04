@@ -110,7 +110,7 @@ public class WechatAuthServiceImpl implements IWechatAuthService {
     public WechatUser getUserInfo() throws ServiceException {
         String openId= (String) HttpUtils.getHttpServletRequest().getSession().getAttribute("openId");
 
-        if (openId == null) {
+        if (StringUtils.isEmpty(openId)) {
             logger.error("session不存在openId");
 
             for (Cookie cookie : HttpUtils.getHttpServletRequest().getCookies()) {
