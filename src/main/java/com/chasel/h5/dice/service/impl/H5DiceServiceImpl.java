@@ -3,6 +3,7 @@ package com.chasel.h5.dice.service.impl;
 import com.chasel.h5.dice.dao.IH5DiceDao;
 import com.chasel.h5.dice.exception.ServiceException;
 import com.chasel.h5.dice.service.IH5DiceService;
+import com.chasel.h5.dice.service.IWechatAuthService;
 import com.chasel.h5.dice.vo.OwnerVO;
 import com.chasel.h5.dice.vo.UserVO;
 import org.apache.commons.collections4.MapUtils;
@@ -45,14 +46,51 @@ public class H5DiceServiceImpl implements IH5DiceService {
     @Autowired
     IH5DiceDao ih5DiceDao;
 
+    @Autowired
+    IWechatAuthService iWechatAuthService;
+
     @Override
     public int checkUserOrOwner(String account) {
+        Integer result = ih5DiceDao.isOwner(account);
+
+        // 1为店主，其余情况看做玩家
+        if (result == 1) {
+            return 1;
+        }
+
         return 0;
     }
 
     @Override
-    public void registerStoreOwner(OwnerVO ownerVO) {
+    public boolean registerStoreOwner(OwnerVO ownerVO) {
+        try {
 
+            //获取当前登录的微信openid
+            String account = iWechatAuthService.getCurrentOpenId();
+
+            if (StringUtils.isEmpty(account)) {
+                throw new ServiceException("未登录微信，无法注册");
+            }
+
+            //获取用户注册是否注册
+            int registerStatus = ih5DiceDao.checkRegisterStatus(account);
+
+            if (registerStatus > 0) {
+                throw new ServiceException("用户已注册");
+            }
+
+            ownerVO.setAccount(account);
+            int result = ih5DiceDao.registerOwner(ownerVO);
+
+            if (result == 0) {
+                return false;
+            }
+
+            return true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return false;
+        }
     }
 
     @Override
@@ -72,7 +110,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
             if (numOfGames.equals(3)) throw new ServiceException(MSG_NO_NUM_OF_GAMES);
             else return true;
         } else { // 2.2 不等 -> 则有3次机会
-            return  true;
+            return true;
         }
     }
 
@@ -89,7 +127,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         if (mask != null && mask.equals(1)) {
             // TODO  是true：改变mask的值，生成面膜二维码保存、数据库存储二维码地址
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -106,10 +144,10 @@ public class H5DiceServiceImpl implements IH5DiceService {
             if (code.equals(0)) {
                 ih5DiceDao.changeIsTreasureBox(account, 1, new Timestamp(System.currentTimeMillis()));
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else { //值为1：直接返回false，不中奖
+        } else { //值为1：直接返回false，不中奖
             return false;
         }
     }
@@ -140,7 +178,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         Integer code = ih5DiceDao.isFirstViewPrizes(account);
         if (code != null && code.equals(1)) {
             return false;
-        }else {
+        } else {
             return true;
         }
     }
@@ -155,8 +193,8 @@ public class H5DiceServiceImpl implements IH5DiceService {
         // 3、查看用户是否存在
         String userValue = ih5DiceDao.queryUser(account);
         if (StringUtils.isEmpty(userValue)) {
-            ih5DiceDao.insertUserPhone(account,phone, 0);
-        }else{
+            ih5DiceDao.insertUserPhone(account, phone, 0);
+        } else {
             // 3、查询手机号是否存在
             String phonev = ih5DiceDao.queryPhone(account);
             Assert.isTrue(StringUtils.isEmpty(phonev), EXIST_PHONE);
@@ -195,7 +233,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         // 2、查询中奖时间treasure_box_time，如果超过24小时，直接提示
         Timestamp time = ih5DiceDao.getTreasureBoxTimeBy(userVO.getAccount());
         if (time != null) {
-            long diff  = System.currentTimeMillis() - time.getTime();
+            long diff = System.currentTimeMillis() - time.getTime();
             long days = diff / (1000 * 60 * 60 * 24);
             if (days >= 1) {
                 throw new ServiceException("中奖时间超过一天！");
@@ -205,7 +243,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         String userValue = ih5DiceDao.queryUser(userVO.getAccount());
         if (!StringUtils.isEmpty(userValue)) {
             ih5DiceDao.saveUserDeliveryInfo(userVO);
-        }else{
+        } else {
             throw new ServiceException("用户不存在！");
         }
     }
@@ -215,7 +253,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         // 检查是否中奖超过24小时，超过返回true，不超过返回false，中奖时间treasure_box_time
         Timestamp time = ih5DiceDao.getTreasureBoxTimeBy(account);
         if (time != null) {
-            long diff  = System.currentTimeMillis() - time.getTime();
+            long diff = System.currentTimeMillis() - time.getTime();
             long days = diff / (1000 * 60 * 60 * 24);
             if (days >= 1) {
                 return true;
@@ -229,7 +267,7 @@ public class H5DiceServiceImpl implements IH5DiceService {
         //1、0-999范围的1000个随机数，0是中奖返回true，其它返回false
         Integer code = new Random().nextInt(99);
         log.info("0~99 -> account : {} , code ： {}", account, code);
-        if (code.equals(0)){
+        if (code.equals(0)) {
             return true;
         } else {
             return false;
@@ -250,11 +288,11 @@ public class H5DiceServiceImpl implements IH5DiceService {
             list.forEach(map -> {
                 Integer write_off_mask = (Integer) map.remove("write_off_mask");
                 Integer write_off_treasure_box = (Integer) map.remove("write_off_treasure_box");
-                if(write_off_mask.equals(1) && write_off_treasure_box.equals(0)){
+                if (write_off_mask.equals(1) && write_off_treasure_box.equals(0)) {
                     map.put("writeOffType", "一片面膜");
-                }else if (write_off_mask.equals(0) && write_off_treasure_box.equals(1)){
+                } else if (write_off_mask.equals(0) && write_off_treasure_box.equals(1)) {
                     map.put("writeOffType", "珍爱套盒");
-                }else {
+                } else {
                     map.put("writeOffType", "一片面膜+珍爱套盒");
                 }
             });

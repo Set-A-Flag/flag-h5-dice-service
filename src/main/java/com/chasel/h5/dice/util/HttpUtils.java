@@ -14,6 +14,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -55,5 +56,14 @@ public class HttpUtils {
      */
     public static HttpServletResponse getHttpServletResponse() {
         return ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    }
+
+    /**
+     * 获取HttpSession对象
+     *
+     * @return HttpSession对象
+     */
+    public static HttpSession getHttpSession() {
+        return getHttpServletRequest().getSession();
     }
 }

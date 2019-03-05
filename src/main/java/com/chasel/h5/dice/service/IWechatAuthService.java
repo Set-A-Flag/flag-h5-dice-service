@@ -32,4 +32,10 @@ public interface IWechatAuthService {
      */
     public abstract WechatUser getUserInfo() throws ServiceException;
 
+    /**
+     * 获取当前登录的微信openid
+     *
+     * @return openid
+     */
+    public abstract String getCurrentOpenId();
 }
