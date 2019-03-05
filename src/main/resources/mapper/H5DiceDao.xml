@@ -2,60 +2,60 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chasel.h5.dice.dao.IH5DiceDao">
 
-	<select id="getRecordingTimeByAccount" resultType="java.util.Map">
+    <select id="getRecordingTimeByAccount" resultType="java.util.Map">
 		select recording_time recordingTime, number_of_games numOfGames from t_user where account = #{account}
 	</select>
 
-	<select id="getTreasureBoxTimeBy" resultType="java.sql.Timestamp">
+    <select id="getTreasureBoxTimeBy" resultType="java.sql.Timestamp">
 		select treasure_box_time from t_user where account = #{account}
 	</select>
 
-	<select id="isFirstViewPrizes" resultType="java.lang.Integer">
+    <select id="isFirstViewPrizes" resultType="java.lang.Integer">
 		select is_first_view from t_user where account = #{account}
 	</select>
 
-	<update id="changeIsTreasureBox">
+    <update id="changeIsTreasureBox">
 		update t_user set is_treasure_box = #{code},treasure_box_time = #{time}	where account = #{account}
 	</update>
 
-	<select id="maskLattice" resultType="java.lang.Integer">
+    <select id="maskLattice" resultType="java.lang.Integer">
 		select mask from t_user	where account = #{account}
 	</select>
 
-  	<select id="queryPrizes" resultType="java.util.Map">
+    <select id="queryPrizes" resultType="java.util.Map">
 		select mask mask,is_treasure_box isTreasureBox from t_user where account = #{account}
 	</select>
 
-	<select id="questionLattice" resultType="java.lang.Integer">
+    <select id="questionLattice" resultType="java.lang.Integer">
 		select is_treasure_box isTreasureBox from t_user where account = #{account}
 	</select>
 
-	<select id="queryPhone" resultType="java.lang.String">
+    <select id="queryPhone" resultType="java.lang.String">
 		select phone from t_user where account = #{account}
 	</select>
 
-	<update id="saveUserPhone">
+    <update id="saveUserPhone">
 		update t_user set phone = #{phone},is_first_view = #{isFirstView} where account = #{account}
 	</update>
 
-	<select id="queryUser" resultType="java.lang.String">
+    <select id="queryUser" resultType="java.lang.String">
 		select 1 from t_user where account = #{account}
 	</select>
 
-	<insert id="insertUserPhone">
+    <insert id="insertUserPhone">
 		insert into t_user (account, phone) value (#{account}, #{phone})
 	</insert>
 
-	<update id="saveUserDeliveryInfo">
+    <update id="saveUserDeliveryInfo">
 		update t_user set `name` = #{userVO.name}, address = #{userVO.address}, receiving_call = #{userVO.receivingCall}
 		where account = #{userVO.account}
 	</update>
 
-	<select id="queryUserDeliveryInfo" resultType="com.chasel.h5.dice.vo.UserVO">
+    <select id="queryUserDeliveryInfo" resultType="com.chasel.h5.dice.vo.UserVO">
 		select account,`name`, address, receiving_call receivingCall from t_user where account = #{account}
 	</select>
 
-	<select id="writeOff" resultType="java.util.Map">
+    <select id="writeOff" resultType="java.util.Map">
 		select account,nickname,headimgurl,write_off_mask, write_off_treasure_box, write_off_time
 		from t_user
 		inner join t_wechat_user
@@ -64,6 +64,15 @@
 		order by write_off_time desc
 	</select>
 
+    <select id="isOwner">
+		select count(1) from t_user where is_owner=1 and account=#{account};
+	</select>
 
+    <select id="checkRegisterStatus">
+		select count(1) from t_user where account=#{account};
+	</select>
 
+    <insert id="registerOwner" parameterType="owner">
+		insert into t_user(account,name,phone,address,store_name,attributable_agent) values(#{account},#{name},#{phone},#{address},#{storeName},#{attributableAgent});
+	</insert>
 </mapper>

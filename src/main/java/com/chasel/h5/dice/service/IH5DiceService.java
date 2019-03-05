@@ -30,7 +30,7 @@ public interface IH5DiceService {
      * @Param [ownerVO]
      * @return void
      **/
-    void registerStoreOwner(OwnerVO ownerVO);
+    boolean registerStoreOwner(OwnerVO ownerVO);
 
     /**
      * @Author chasel

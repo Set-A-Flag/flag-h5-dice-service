@@ -1,6 +1,11 @@
 package com.chasel.h5.dice.vo;
 
+import org.apache.ibatis.type.Alias;
+
+@Alias("owner")
 public class OwnerVO {
+
+    private String account;
 
     private String name;
 
@@ -63,10 +68,19 @@ public class OwnerVO {
         this.attributableAgent = attributableAgent;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
     @Override
     public String toString() {
         return "OwnerVO{" +
-                "name='" + name + '\'' +
+                "account='" + account + '\'' +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
                 ", storeName='" + storeName + '\'' +

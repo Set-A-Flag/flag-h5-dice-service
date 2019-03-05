@@ -1,5 +1,6 @@
 package com.chasel.h5.dice.dao;
 
+import com.chasel.h5.dice.vo.OwnerVO;
 import com.chasel.h5.dice.vo.UserVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -42,4 +43,10 @@ public interface IH5DiceDao {
     UserVO queryUserDeliveryInfo(@Param("account") String account);
 
     List<Map<String, Object>> writeOff();
+
+    Integer isOwner(@Param("account")String account);
+
+    int checkRegisterStatus(@Param("account")String account);
+
+    int registerOwner(@Param("owner")OwnerVO ownerVO);
 }

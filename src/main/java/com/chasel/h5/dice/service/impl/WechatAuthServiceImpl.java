@@ -124,4 +124,9 @@ public class WechatAuthServiceImpl implements IWechatAuthService {
             return wechatUserDao.queryByOpenid(openId);
         }
     }
+
+    @Override
+    public String getCurrentOpenId() {
+        return null;
+    }
 }
